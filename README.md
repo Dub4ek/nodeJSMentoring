@@ -1,2 +1,3 @@
 # nodeJSMentoring
-NodeJs Mentoring programm tasks
+NodeJs Mentoring program tasks
+Andrei Starodubtcev Group 1
