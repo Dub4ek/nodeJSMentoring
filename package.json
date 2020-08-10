@@ -4,10 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "task1": "nodemon  src/week1/Task_1_1.mjs",
-    "task2": "nodemon  src/week1/Task_1_2.mjs",
-    "task3.1": "nodemon --exec babel-node src/week1/Task_1_1.mjs",
-    "task3.2": "nodemon --exec babel-node src/week1/Task_1_2.mjs"
+    "task1.1": "nodemon  src/week1/Task_1_1.mjs",
+    "task1.2": "nodemon  src/week1/Task_1_2.mjs",
+    "task1.3.1": "nodemon --exec babel-node src/week1/Task_1_1.mjs",
+    "task1.3.2": "nodemon --exec babel-node src/week1/Task_1_2.mjs",
+    "task2.1": "nodemon --exec babel-node src/week2/Task_2_1.mjs"
   },
   "keywords": [],
   "author": "",
@@ -15,9 +16,15 @@
   "devDependencies": {
     "@babel/core": "^7.11.0",
     "@babel/node": "^7.10.5",
+    "express": "^4.17.1",
     "nodemon": "^2.0.4"
   },
   "dependencies": {
-    "csvtojson": "^2.0.10"
+    "ajv": "^6.12.3",
+    "config": "^3.3.1",
+    "csvtojson": "^2.0.10",
+    "eslint": "^7.6.0",
+    "http-errors": "^1.8.0",
+    "winston": "^3.3.3"
   }
 }
