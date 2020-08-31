@@ -1,5 +1,8 @@
 {
   "Webserver": {
     "port": 3456
+  },
+  "DB": {
+    "uri": "postgres://pqiduudehcfhzc:3342e01814d386d6c2358582286f20e713702ada25c34ebc7b05050828f80af8@ec2-54-75-244-161.eu-west-1.compute.amazonaws.com:5432/d9pub8ph4ipa03"
   }
 }
