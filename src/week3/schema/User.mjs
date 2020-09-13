@@ -27,7 +27,12 @@ export const UserUpdate = Joi.object({
     .max(130)
 });
 
-export const UserDelete = Joi.object({
+export const UserById = Joi.object({
   id: Joi.string()
     .required()
+});
+
+export const UsersList = Joi.object({
+  login: Joi.string(),
+  limit: Joi.number()
 });
