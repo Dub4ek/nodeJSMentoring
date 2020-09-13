@@ -1,7 +1,7 @@
-import expressLoader from './express.mjs';
-import sequilize from './sequilize.mjs';
+import expressLoader from './express.loaders..mjs';
+import sequilize from './sequelize.loaders.mjs';
 
-export default async function ({expressApp}) {
+export default async function ({ expressApp }) {
   await sequilize();
   await expressLoader(expressApp);
 }

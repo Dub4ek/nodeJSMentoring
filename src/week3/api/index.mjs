@@ -1,9 +1,8 @@
 import express from 'express';
-import user from './routes/user.mjs';
+import user from './routes/user.router.mjs';
 
-export default function() {
+export default function () {
   const app = new express.Router();
-
   user(app);
 
   return app;

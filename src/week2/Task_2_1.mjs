@@ -3,7 +3,7 @@ import config from 'config';
 import UserStorage from './UserStorage.mjs';
 import bodyParser from 'body-parser';
 import UserResponse from './dto/UserResponse.mjs';
-import { UserCreate, UserUpdate, UserDelete} from './schema/User.mjs';
+import { UserCreate, UserUpdate, UserDelete } from './schema/User.mjs';
 import { validateMiddleware } from './schema/validateMiddleware.mjs';
 
 const application = express();
