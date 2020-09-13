@@ -1,13 +1,8 @@
 import Sequelize from 'sequelize';
-import config from 'config';
 
 export default async function() {
-  const sequelize = new Sequelize(config.get('DB.uri'));
+  const sequelize = new Sequelize('postgres://postgres:111111@localhost:5433/nodejsMentoring');
+  await sequelize.authenticate();
 
-  try {
-    await sequelize.authenticate();
-    console.log('Connection has been established successfully.');
-  } catch (error) {
-    console.error('Unable to connect to the database:', error);
-  }
+  return sequelize;
 }

@@ -1,8 +1,5 @@
 {
   "Webserver": {
     "port": 3456
-  },
-  "DB": {
-    "uri": ""
   }
 }
