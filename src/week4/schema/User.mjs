@@ -16,6 +16,7 @@ export const UserCreate = Joi.object({
 });
 
 export const UserUpdate = Joi.object({
+  id: Joi.string().required(),
   login: Joi.string(),
 
   password: Joi.string()
