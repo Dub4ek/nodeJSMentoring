@@ -4,7 +4,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export default async function () {
-  const sequelize = new Sequelize(process.env.DATABSE_URL);
-  await sequelize.authenticate();
-  return sequelize;
+  const sequelizeConnector = new Sequelize(process.env.DATABSE_URL);
+  await sequelizeConnector.authenticate();
+
+  return sequelizeConnector;
 }

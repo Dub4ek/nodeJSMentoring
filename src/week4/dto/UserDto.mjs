@@ -1,4 +1,4 @@
-export default class UserDTO {
+export default class UserDto {
   constructor(id, login, password, age, isDeleted = false) {
     this.id = id;
     this.login = login;
@@ -8,7 +8,7 @@ export default class UserDTO {
   }
 
   static fromObject(data) {
-    const result = new UserDTO();
+    const result = new UserDto();
 
     result.id = data.id;
     result.login = data.login;

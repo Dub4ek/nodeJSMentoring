@@ -26,6 +26,6 @@ export const GroupById = Joi.object({
 });
 
 export const GroupsList = Joi.object({
-  login: Joi.string(),
+  name: Joi.string(),
   limit: Joi.number()
 });

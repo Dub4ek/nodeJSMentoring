@@ -6,10 +6,10 @@ import { GroupById, GroupCreate, GroupsList, GroupUpdate } from '../../schema/Gr
 
 const { Router } = express;
 const route = new Router();
-const groupService = new GroupService();
 
-export default function (app) {
+export default function (app, dbConnector) {
   app.use('/groups', route);
+  const groupService = new GroupService(dbConnector);
 
   route.get('/', middlewares.validateMiddleware(GroupById), async (req, res) => {
     const request = req.body;

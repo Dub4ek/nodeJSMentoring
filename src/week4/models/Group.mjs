@@ -1,14 +1,11 @@
 import sequelize from 'sequelize';
-import sequelizeLoaders from '../loaders/sequelize.loaders.mjs';
 import GROUP_PERMISSIONS from '../constant/GroupPermissions.constant.mjs';
 
 const { DataTypes, Model } = sequelize;
 
 class Group extends Model {}
 
-export default async function () {
-  const sequelizePG = await sequelizeLoaders();
-
+export default function (dbConnector) {
   return Group.init({
     id: {
       type: DataTypes.UUID,
@@ -20,12 +17,12 @@ export default async function () {
       allowNull: false
     },
     permissions: {
-      type: DataTypes.ARRAY,
+      type: DataTypes.ARRAY(DataTypes.TEXT),
       values: [GROUP_PERMISSIONS.READ, GROUP_PERMISSIONS.WRITE, GROUP_PERMISSIONS.DELETE, GROUP_PERMISSIONS.SHARE, GROUP_PERMISSIONS.UPLOAD_FILES]
     }
   },
   {
-    sequelize: sequelizePG,
+    sequelize: dbConnector,
     modelName: 'Group',
     tableName: 'groups',
     timestamps: false

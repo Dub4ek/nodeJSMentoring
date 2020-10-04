@@ -37,3 +37,9 @@ export const UsersList = Joi.object({
   login: Joi.string(),
   limit: Joi.number()
 });
+
+
+export const UserToGroup = Joi.object({
+  groupId: Joi.string().required(),
+  userIds: Joi.array().items(Joi.string()).required()
+});

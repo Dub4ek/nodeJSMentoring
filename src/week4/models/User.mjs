@@ -1,13 +1,10 @@
 import sequelize from 'sequelize';
-import sequelizeLoaders from '../loaders/sequelize.loaders.mjs';
 
 const { DataTypes, Model } = sequelize;
 
 class User extends Model {}
 
-export default async function () {
-  const sequelizePG = await sequelizeLoaders();
-
+export default function (dbConnector) {
   return User.init({
     id: {
       type: DataTypes.UUID,
@@ -33,7 +30,7 @@ export default async function () {
     }
   },
   {
-    sequelize: sequelizePG,
+    sequelize: dbConnector,
     modelName: 'User',
     tableName: 'users',
     timestamps: false

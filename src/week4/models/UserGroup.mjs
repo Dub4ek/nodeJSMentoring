@@ -1,21 +1,16 @@
 import sequelize from 'sequelize';
-import sequelizeLoaders from '../loaders/sequelize.loaders.mjs';
-import User from './User';
-import Group from './Group';
+import User from './User.mjs';
+import Group from './Group.mjs';
 
 const { DataTypes, Model } = sequelize;
 
 class UserGroup extends Model {}
 
-export default async function () {
-  const sequelizePG = await sequelizeLoaders();
-  const UserModel = await User();
-  const GroupModel = await Group();
+export default function (dbConnector) {
+  const UserModel = User(dbConnector);
+  const GroupModel = Group(dbConnector);
 
-  UserModel.belongsToMany(GroupModel, { through: UserGroup });
-  GroupModel.belongsToMany(UserModel, { through: UserGroup });
-
-  return UserGroup.init({
+  UserGroup.init({
     UserId: {
       type: DataTypes.UUID,
       references: {
@@ -32,9 +27,14 @@ export default async function () {
     }
   },
   {
-    sequelize: sequelizePG,
-    modelName: 'Group',
-    tableName: 'groups',
+    sequelize: dbConnector,
+    modelName: 'UserGroup',
+    tableName: 'userGroup',
     timestamps: false
   });
+
+  UserModel.belongsToMany(GroupModel, { through: UserGroup });
+  GroupModel.belongsToMany(UserModel, { through: UserGroup });
+
+  return UserGroup;
 }

@@ -1,17 +1,19 @@
 import express from 'express';
-import UserDTO from '../../dto/User.dto.mjs';
+import UserDto from '../../dto/UserDto.mjs';
 import UserService from '../../services/user.service.mjs';
 import UserResponse from '../../dto/UserResponse.mjs';
 import middlewares from '../middleware/index.mjs';
 import { UserCreate, UserUpdate } from '../../schema/User.mjs';
 import { UserById, UsersList } from '../../schema/User.mjs';
+import { UserToGroup } from '../../schema/User.mjs';
 
 const { Router } = express;
 const route = new Router();
-const userService = new UserService();
 
-export default function (app) {
+export default function (app, dbConnector) {
   app.use('/users', route);
+
+  const userService = new UserService(dbConnector);
 
   route.get('/', middlewares.validateMiddleware(UserById), async (req, res) => {
     const request = req.body;
@@ -29,7 +31,7 @@ export default function (app) {
   });
 
   route.put('/', middlewares.validateMiddleware(UserCreate),  async (req, res) => {
-    const userDTO = UserDTO.fromObject(req.body);
+    const userDTO = UserDto.fromObject(req.body);
     try {
       const addUserResult = await userService.addUser(userDTO);
 
@@ -45,7 +47,7 @@ export default function (app) {
 
   route.post('/', middlewares.validateMiddleware(UserUpdate), async (req, res) => {
     try {
-      const userDTO = UserDTO.fromObject(req.body);
+      const userDTO = UserDto.fromObject(req.body);
       const updateUserResult = await userService.updateUser(userDTO);
 
       return res.json(UserResponse.fromObject(updateUserResult));
@@ -86,5 +88,20 @@ export default function (app) {
 
       return res.status(500).send("Unknown error");
     }
+  });
+
+  route.post('/addUsersToGroup', middlewares.validateMiddleware(UserToGroup), async (req, res) => {
+    try {
+      const request = req.body;
+      await userService.addUsersToGroup(request);
+
+      return res.json({ test: "Users have been successfully added to the group" });
+    } catch (e) {
+      if (e.message) {
+        return res.status(404).send(e.message);
+      }
+    }
+
+    return res.status(500).send("Unknown error");
   });
 }

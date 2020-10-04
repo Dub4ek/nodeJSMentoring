@@ -5,71 +5,89 @@ const { Op } = sequelize;
 
 
 class GroupService {
-  async addGroup(groupDto) {
-    const GroupModel = await Group();
-    const result = await GroupModel.create(groupDto);
+  constructor(dbConnector) {
+    this.groupModel = Group(dbConnector);
+    this.dbConnector = dbConnector;
+  }
 
-    return result;
+  async addGroup(groupDto) {
+    const transactionMethod = async (transaction) => {
+      const result = await this.groupModel.create(groupDto, { transaction });
+
+      return result;
+    };
+
+    return await this._getTransaction(transactionMethod);
   }
 
   async deleteGroup({ id }) {
-    const GroupModel = await Group();
+    const transactionMethod = async (transaction) => {
+      const result = (await this.groupModel.findOne({
+        where: {
+          id
+        }
+      }, { transaction })).destroy({ transaction });
 
-    const result = (await GroupModel.findOne({
-      where: {
-        id
-      }
-    })).destroy();
+      return result;
+    };
 
-    return result;
+    return await this._getTransaction(transactionMethod);
   }
 
   async getGroup({ id }) {
-    const GroupModel = await Group();
+    const transactionMethod = async (transaction) => {
+      return await this.groupModel.findOne({
+        where: {
+          id
+        }
+      }, { transaction });
+    };
 
-    return await GroupModel.findOne({
-      where: {
-        id
-      }
-    });
+    return await this._getTransaction(transactionMethod);
   }
 
   async updateGroup(group) {
-    const GroupModel = await Group();
-
-    const result = await GroupModel.findOne({
-      where: {
-        id: group.id
-      }
-    });
-
-    if (result) {
-      Object.keys(group).forEach(key => {
-        if (group[key]) {
-          result[key] = group[key];
+    const transactionMethod = async (transaction) => {
+      const result = await this.groupModel.findOne({
+        where: {
+          id: group.id
         }
-      });
+      }, { transaction });
 
-      await result.save();
-    }
+      if (result) {
+        Object.keys(group).forEach(key => {
+          if (group[key]) {
+            result[key] = group[key];
+          }
+        });
 
-    return result;
+        await result.save({ transaction });
+      }
+
+      return result;
+    };
+
+    return await this._getTransaction(transactionMethod);
   }
 
   async listGroups({ name = '', limit = 10 }) {
-    const GroupModel = await Group();
+    const transactionMethod = async (transaction) => {
+      return await this.groupModel.findAll({
+        where: {
+          name: {
+            [Op.substring]: name
+          }
+        },
+        order: [['name', 'ASC']],
+        limit
+      }, { transaction });
+    };
 
-    const result = await GroupModel.findAll({
-      where: {
-        name: {
-          [Op.substring]: name
-        }
-      },
-      order: [['name', 'ASC']],
-      limit
-    });
+    return await this._getTransaction(transactionMethod);
+  }
 
-    return result;
+  async _getTransaction(method) {
+    return await this.dbConnector.transaction(method);
   }
 }
 
