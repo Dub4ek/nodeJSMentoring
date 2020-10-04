@@ -1,11 +1,17 @@
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
+import winston from 'winston';
+import cors from 'cors';
 import routes from '../api/index.mjs';
 
 export default function (app, dbConnector) {
-  app.use(morgan('tiny'));
-  app.use(bodyParser());
+  morgan.token('reqArgs', (req) => JSON.stringify(req.body));
+  app.use(morgan(':method :url :reqArgs :status :res[content-length] - :response-time ms', {
+    skip: (_, res) => res.statusCode < 400
+  }));
+  app.use(bodyParser.json());
   app.use('/', routes(dbConnector));
+  app.use(cors());
 
   app.use((req, res, next) => {
     const err = new Error('Not Found');
@@ -27,6 +33,7 @@ export default function (app, dbConnector) {
   });
   app.use((err, req, res) => {
     res.status(err.status || 500);
+    winston.error(`${err.status || 500} - ${err.message} - ${req.originalUrl} - ${req.method} - ${req.ip}`);
     res.json({
       errors: {
         message: err.message

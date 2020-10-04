@@ -1,5 +1,8 @@
 {
   "Webserver": {
     "port": 3456
+  },
+  "Logs" : {
+    "level": "silly"
   }
 }

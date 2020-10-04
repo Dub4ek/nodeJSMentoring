@@ -11,7 +11,7 @@ export default function (app, dbConnector) {
   app.use('/groups', route);
   const groupService = new GroupService(dbConnector);
 
-  route.get('/', middlewares.validateMiddleware(GroupById), async (req, res) => {
+  route.get('/', middlewares.validateMiddleware(GroupById), async (req, res, next) => {
     const request = req.body;
 
     try {
@@ -19,71 +19,51 @@ export default function (app, dbConnector) {
 
       return res.status(200).json(GroupDto.fromObject(getGroupResult));
     } catch (e) {
-      if (e.message) {
-        return res.status(404).send(e.message);
-      }
-
-      return res.status(500).send("Unknown error");
+      return next(e);
     }
   });
 
-  route.put('/', middlewares.validateMiddleware(GroupCreate), async (req, res) => {
+  route.put('/', middlewares.validateMiddleware(GroupCreate), async (req, res, next) => {
     try {
       const groupDTO = GroupDto.fromObject(req.body);
       const addGroupResult = await groupService.addGroup(groupDTO);
 
       return res.status(201).json(GroupDto.fromObject(addGroupResult));
     } catch (e) {
-      if (e.message) {
-        return res.status(404).send(e.message);
-      }
-
-      return res.status(500).send("Unknown error");
+      return next(e);
     }
   });
 
-  route.delete('/', middlewares.validateMiddleware(GroupById), async (req, res) => {
+  route.delete('/', middlewares.validateMiddleware(GroupById), async (req, res, next) => {
     try {
       const group = req.body;
       await groupService.deleteGroup(group);
 
       return res.json({ text: 'Group successfully has been deleted' });
     } catch (e) {
-      if (e.message) {
-        return res.status(404).send(e.message);
-      }
-
-      return res.status(500).send("Unknown error");
+      return next(e);
     }
   });
 
-  route.post('/', middlewares.validateMiddleware(GroupUpdate), async (req, res) => {
+  route.post('/', middlewares.validateMiddleware(GroupUpdate), async (req, res, next) => {
     try {
       const group = GroupDto.fromObject(req.body);
       const updateGroupResult = await groupService.updateGroup(group);
 
       return res.json(GroupDto.fromObject(updateGroupResult));
     } catch (e) {
-      if (e.message) {
-        return res.status(404).send(e.message);
-      }
-
-      return res.status(500).send("Unknown error");
+      return next(e);
     }
   });
 
-  route.post('/list', middlewares.validateMiddleware(GroupsList), async (req, res) => {
+  route.post('/list', middlewares.validateMiddleware(GroupsList), async (req, res, next) => {
     try {
       const request = req.body;
       const listGroupResult = await groupService.listGroups(request);
 
       return res.json(listGroupResult);
     } catch (e) {
-      if (e.message) {
-        return res.status(404).send(e.message);
-      }
-
-      return res.status(500).send("Unknown error");
+      return next(e);
     }
   });
 }

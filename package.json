@@ -10,7 +10,8 @@
     "task1.3.2": "nodemon --exec babel-node src/week1/Task_1_2.mjs",
     "task2.1": "nodemon --exec babel-node src/week2/Task_2_1.mjs",
     "task3.1": "nodemon --exec babel-node src/week3/app.mjs",
-    "task4.1": "nodemon --exec babel-node src/week4/app.mjs"
+    "task4.1": "nodemon --exec babel-node src/week4/app.mjs",
+    "task5.1": "nodemon --exec babel-node src/week5/app.mjs"
   },
   "keywords": [],
   "author": "",
@@ -26,6 +27,7 @@
     "babel-eslint": "^10.1.0",
     "body-parser": "^1.19.0",
     "config": "^3.3.1",
+    "cors": "^2.8.5",
     "csvtojson": "^2.0.10",
     "dotenv": "^8.2.0",
     "eslint": "^7.6.0",
