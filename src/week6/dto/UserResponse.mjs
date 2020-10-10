@@ -11,7 +11,6 @@ export default class UserResponse {
 
     result.id = data.id;
     result.login = data.login;
-    result.password = data.password;
     result.age = data.age;
 
     return result;

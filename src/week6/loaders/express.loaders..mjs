@@ -23,9 +23,14 @@ export default function (app, dbConnector) {
     /**
      * Handle 401 thrown by express-jwt library
      */
-    if (err.name === 'UnauthorizedError') {
+    if (err.code === 'credentials_required') {
       return res
         .status(err.status)
+        .send({ message: err.message })
+        .end();
+    } else if (err.name === 'UnauthorizedError') {
+      return res
+        .status(403)
         .send({ message: err.message })
         .end();
     }

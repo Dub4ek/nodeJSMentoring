@@ -6,6 +6,7 @@ import middlewares from '../middleware/index.mjs';
 import { UserCreate, UserUpdate } from '../../schema/User.mjs';
 import { UserById, UsersList } from '../../schema/User.mjs';
 import { UserToGroup } from '../../schema/User.mjs';
+import { UserLogin } from '../../schema/User.mjs';
 
 const { Router } = express;
 const route = new Router();
@@ -15,7 +16,7 @@ export default function (app, dbConnector) {
 
   const userService = new UserService(dbConnector);
 
-  route.get('/', middlewares.validateMiddleware(UserById), async (req, res, next) => {
+  route.get('/', middlewares.validateMiddleware(UserById), middlewares.isAuthorised, async (req, res, next) => {
     const request = req.body;
 
     try {
@@ -27,7 +28,7 @@ export default function (app, dbConnector) {
     }
   });
 
-  route.put('/', middlewares.validateMiddleware(UserCreate),  async (req, res, next) => {
+  route.put('/', middlewares.validateMiddleware(UserCreate), middlewares.isAuthorised,  async (req, res, next) => {
     const userDTO = UserDto.fromObject(req.body);
 
     try {
@@ -39,7 +40,7 @@ export default function (app, dbConnector) {
     }
   });
 
-  route.post('/', middlewares.validateMiddleware(UserUpdate), async (req, res, next) => {
+  route.post('/', middlewares.validateMiddleware(UserUpdate), middlewares.isAuthorised, async (req, res, next) => {
     try {
       const userDTO = UserDto.fromObject(req.body);
       const updateUserResult = await userService.updateUser(userDTO);
@@ -50,7 +51,7 @@ export default function (app, dbConnector) {
     }
   });
 
-  route.delete('/', middlewares.validateMiddleware(UserById),  async (req, res, next) => {
+  route.delete('/', middlewares.validateMiddleware(UserById), middlewares.isAuthorised, async (req, res, next) => {
     try {
       const request = req.body;
       await userService.deleteUser(request);
@@ -61,7 +62,7 @@ export default function (app, dbConnector) {
     }
   });
 
-  route.post('/list', middlewares.validateMiddleware(UsersList), async (req, res, next) => {
+  route.post('/list', middlewares.validateMiddleware(UsersList), middlewares.isAuthorised, async (req, res, next) => {
     try {
       const request = req.body;
       const listUsersResult = await userService.listUsers(request);
@@ -72,12 +73,23 @@ export default function (app, dbConnector) {
     }
   });
 
-  route.post('/addUsersToGroup', middlewares.validateMiddleware(UserToGroup), async (req, res, next) => {
+  route.post('/addUsersToGroup', middlewares.validateMiddleware(UserToGroup), middlewares.isAuthorised, async (req, res, next) => {
     try {
       const request = req.body;
       await userService.addUsersToGroup(request);
 
       return res.json({ test: "Users have been successfully added to the group" });
+    } catch (e) {
+      return next(e);
+    }
+  });
+
+  route.post('/login', middlewares.validateMiddleware(UserLogin), async (req, res, next) => {
+    try {
+      const request = req.body;
+      const signinResult = await userService.loginUser(request);
+
+      return res.json({ user: UserResponse.fromObject(signinResult.user), token: signinResult.token });
     } catch (e) {
       return next(e);
     }

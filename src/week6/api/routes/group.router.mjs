@@ -11,7 +11,7 @@ export default function (app, dbConnector) {
   app.use('/groups', route);
   const groupService = new GroupService(dbConnector);
 
-  route.get('/', middlewares.validateMiddleware(GroupById), async (req, res, next) => {
+  route.get('/', middlewares.validateMiddleware(GroupById), middlewares.isAuthorised, async (req, res, next) => {
     const request = req.body;
 
     try {
@@ -23,7 +23,7 @@ export default function (app, dbConnector) {
     }
   });
 
-  route.put('/', middlewares.validateMiddleware(GroupCreate), async (req, res, next) => {
+  route.put('/', middlewares.validateMiddleware(GroupCreate), middlewares.isAuthorised, async (req, res, next) => {
     try {
       const groupDTO = GroupDto.fromObject(req.body);
       const addGroupResult = await groupService.addGroup(groupDTO);
@@ -34,7 +34,7 @@ export default function (app, dbConnector) {
     }
   });
 
-  route.delete('/', middlewares.validateMiddleware(GroupById), async (req, res, next) => {
+  route.delete('/', middlewares.validateMiddleware(GroupById), middlewares.isAuthorised, async (req, res, next) => {
     try {
       const group = req.body;
       await groupService.deleteGroup(group);
@@ -45,7 +45,7 @@ export default function (app, dbConnector) {
     }
   });
 
-  route.post('/', middlewares.validateMiddleware(GroupUpdate), async (req, res, next) => {
+  route.post('/', middlewares.validateMiddleware(GroupUpdate), middlewares.isAuthorised, async (req, res, next) => {
     try {
       const group = GroupDto.fromObject(req.body);
       const updateGroupResult = await groupService.updateGroup(group);
@@ -56,7 +56,7 @@ export default function (app, dbConnector) {
     }
   });
 
-  route.post('/list', middlewares.validateMiddleware(GroupsList), async (req, res, next) => {
+  route.post('/list', middlewares.validateMiddleware(GroupsList), middlewares.isAuthorised, async (req, res, next) => {
     try {
       const request = req.body;
       const listGroupResult = await groupService.listGroups(request);

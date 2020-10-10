@@ -4,5 +4,9 @@
   },
   "Logs" : {
     "level": "silly"
+  },
+  "Authentication": {
+    "secret": "secretPhraseHere",
+    "algorithms": "HS256"
   }
 }
