@@ -2,6 +2,7 @@ import User from '../models/User.mjs';
 import sequelize from 'sequelize';
 import UserGroup from '../models/UserGroup.mjs';
 import UserGroupDto from '../dto/UserGroup.dto.mjs';
+import Logger from '../loaders/logger.loaders.mjs';
 
 const { Op } = sequelize;
 
@@ -12,6 +13,7 @@ class UserService {
     this.dbConnector = dbConnector;
   }
   async addUser(userDto) {
+    Logger.info(`Called addUser with: ${userDto}`);
     const transactionMethod = async (transaction) => {
       const result = await this.userModel.create(userDto, { transaction });
 
@@ -22,6 +24,7 @@ class UserService {
   }
 
   async getUser({ id }) {
+    Logger.info(`Called getUser with: ${id}`);
     const transactionMethod = async (transaction) => {
       const result = await this.userModel.findOne({
         where: {
@@ -39,6 +42,7 @@ class UserService {
   }
 
   async deleteUser({ id }) {
+    Logger.info(`Called deleteUser with: ${id}`);
     const transactionMethod = async (transaction) => {
       const result = await this.userModel
         .findOne({
@@ -55,6 +59,7 @@ class UserService {
   }
 
   async updateUser(user) {
+    Logger.info(`Called updateUser with: ${user}`);
     const transactionMethod = async (transaction) => {
       const result = await this.userModel.findOne({
         where: {
@@ -82,6 +87,7 @@ class UserService {
   }
 
   async listUsers({ login = '', limit = 10 }) {
+    Logger.info(`Called listUsers with: ${login} ${limit}`);
     const transactionMethod = async (transaction) => {
       return await this.userModel.findAll({
         attributes : ['id', 'login', 'password', 'age'],
@@ -102,6 +108,7 @@ class UserService {
   }
 
   async addUsersToGroup({ groupId, userIds }) {
+    Logger.info(`Called addUsersToGroup with: ${groupId} ${userIds}`);
     const userGroupsCollection = userIds.map(item => UserGroupDto.fromObject({
       userId: item,
       groupId

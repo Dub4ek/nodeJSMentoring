@@ -1,5 +1,6 @@
 import Group from '../models/Group.mjs';
 import sequelize from 'sequelize';
+import Logger from '../loaders/logger.loaders.mjs';
 
 const { Op } = sequelize;
 
@@ -11,6 +12,7 @@ class GroupService {
   }
 
   async addGroup(groupDto) {
+    Logger.info(`Called addGroup with: ${groupDto}`);
     const transactionMethod = async (transaction) => {
       const result = await this.groupModel.create(groupDto, { transaction });
 
@@ -21,6 +23,7 @@ class GroupService {
   }
 
   async deleteGroup({ id }) {
+    Logger.info(`Called deleteGroup with: ${id}`);
     const transactionMethod = async (transaction) => {
       const result = (await this.groupModel.findOne({
         where: {
@@ -35,6 +38,7 @@ class GroupService {
   }
 
   async getGroup({ id }) {
+    Logger.info(`Called getGroup with: ${id}`);
     const transactionMethod = async (transaction) => {
       return await this.groupModel.findOne({
         where: {
@@ -47,6 +51,7 @@ class GroupService {
   }
 
   async updateGroup(group) {
+    Logger.info(`Called updateGroup with: ${group}`);
     const transactionMethod = async (transaction) => {
       const result = await this.groupModel.findOne({
         where: {
@@ -71,6 +76,7 @@ class GroupService {
   }
 
   async listGroups({ name = '', limit = 10 }) {
+    Logger.info(`Called listGroups with: ${name} ${limit}`);
     const transactionMethod = async (transaction) => {
       return await this.groupModel.findAll({
         where: {
