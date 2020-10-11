@@ -1,4 +1,4 @@
-import expressLoader from './express.loaders..mjs';
+import expressLoader from './express.loaders.mjs';
 import sequilize from './sequelize.loaders.mjs';
 import Logger from './logger.loaders.mjs';
 

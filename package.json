@@ -13,7 +13,9 @@
     "task4": "nodemon --exec babel-node src/week4/app.mjs",
     "task5": "nodemon --exec babel-node src/week5/app.mjs",
     "task6": "nodemon --exec babel-node src/week6/app.mjs",
-    "test": "jest"
+    "task7": "cross-env NODE_ENV=development nodemon --exec babel-node src/week7/app.mjs",
+    "test": "cross-env NODE_ENV=test jest --config=jest.config.mjs",
+    "testDev": "cross-env NODE_ENV=test jest --config=jest.config.mjs --watch"
   },
   "keywords": [],
   "author": "",
@@ -21,17 +23,23 @@
   "devDependencies": {
     "@babel/core": "^7.11.0",
     "@babel/node": "^7.10.5",
+    "@babel/preset-env": "^7.11.5",
+    "babel-jest": "^26.5.2",
     "express": "^4.17.1",
     "jest": "^26.5.2",
-    "nodemon": "^2.0.4"
+    "jest-express": "^1.12.0",
+    "nodemon": "^2.0.4",
+    "supertest": "^5.0.0"
   },
   "dependencies": {
     "@hapi/joi": "^17.1.1",
     "argon2": "^0.27.0",
     "babel-eslint": "^10.1.0",
+    "babel-polyfill": "^6.26.0",
     "body-parser": "^1.19.0",
     "config": "^3.3.1",
     "cors": "^2.8.5",
+    "cross-env": "^7.0.2",
     "crypto": "^1.0.1",
     "csvtojson": "^2.0.10",
     "dotenv": "^8.2.0",

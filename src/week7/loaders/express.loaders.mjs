@@ -37,6 +37,9 @@ export default function (app, dbConnector) {
     return next(err);
   });
   app.use((err, req, res) => {
+    if (!res.status) {
+      return;
+    }
     res.status(err.status || 500);
     winston.error(`${err.status || 500} - ${err.message} - ${req.originalUrl} - ${req.method} - ${req.ip}`);
     res.json({

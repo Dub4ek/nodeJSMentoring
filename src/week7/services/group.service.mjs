@@ -1,13 +1,14 @@
 import Group from '../models/Group.mjs';
 import sequelize from 'sequelize';
 import Logger from '../loaders/logger.loaders.mjs';
+import UserGroup from '../models/UserGroup.mjs';
 
 const { Op } = sequelize;
-
 
 class GroupService {
   constructor(dbConnector) {
     this.groupModel = Group(dbConnector);
+    this.userGroupModel = UserGroup(dbConnector);
     this.dbConnector = dbConnector;
   }
 
@@ -31,6 +32,12 @@ class GroupService {
         }
       }, { transaction })).destroy({ transaction });
 
+      await this.userGroupModel.destroy({
+        where: {
+          GroupId: id
+        }
+      }, { transaction });
+
       return result;
     };
 
@@ -39,15 +46,12 @@ class GroupService {
 
   async getGroup({ id }) {
     Logger.info(`Called getGroup with: ${id}`);
-    const transactionMethod = async (transaction) => {
-      return await this.groupModel.findOne({
-        where: {
-          id
-        }
-      }, { transaction });
-    };
 
-    return await this._getTransaction(transactionMethod);
+    return await this.groupModel.findOne({
+      where: {
+        id
+      }
+    });
   }
 
   async updateGroup(group) {
@@ -77,19 +81,15 @@ class GroupService {
 
   async listGroups({ name = '', limit = 10 }) {
     Logger.info(`Called listGroups with: ${name} ${limit}`);
-    const transactionMethod = async (transaction) => {
-      return await this.groupModel.findAll({
-        where: {
-          name: {
-            [Op.substring]: name
-          }
-        },
-        order: [['name', 'ASC']],
-        limit
-      }, { transaction });
-    };
-
-    return await this._getTransaction(transactionMethod);
+    return await this.groupModel.findAll({
+      where: {
+        name: {
+          [Op.substring]: name
+        }
+      },
+      order: [['name', 'ASC']],
+      limit
+    });
   }
 
   async _getTransaction(method) {

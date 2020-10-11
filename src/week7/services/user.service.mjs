@@ -59,6 +59,12 @@ class UserService {
       result.isdeleted = true;
 
       await result.save();
+
+      await this.userGroupModel.destroy({
+        where: {
+          UserId: id
+        }
+      }, { transaction });
     };
     return await this._getTransaction(transactionMethod);
   }
