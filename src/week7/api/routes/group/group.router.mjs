@@ -10,8 +10,7 @@ import {
   updateGroup
 } from './group.methods.mjs';
 
-const { Router } = express;
-const route = new Router();
+const route = express.Router();
 
 export default function (app, dbConnector) {
   app.use('/groups', route);
